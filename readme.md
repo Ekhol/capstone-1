@@ -27,6 +27,20 @@ Schema Plan
 
 - The second database will be the more 'fluid' of the two, allowing for permanent changes by the users through posting, editing, and deleting of recipes.
 
+### Public View
+
+Public view will be the data accessible by users who are not logged in or do not have an account. It will provide the information pulled from the cocktaildb as well as data from drinks that authorized users have deemed public. 
+
+PULLS data from cocktaildb API and the original database and displays them in two different fields:
+
+- Classic cocktails
+- User-submitted cocktails
+
+### Authorized User View
+
+Authorized user view will be accessible by users who have created an account and are logged in. Beyond accessing the classic cocktail and public user-submitted list, they will have access to individualized folders where they can pin cocktails for easy access and a field to upload their own drinks. 
+
+
 Stretch Goals
 
 - Stronger authentication
