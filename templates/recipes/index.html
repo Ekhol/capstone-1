@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if recipes|length == 0 %}
+<h1 class="text-center">No submitted recipes yet!</h1>
+{% else %}
+<div class="row justify-content-center">
+    <div class="col-sm-9">
+        <div class="row">
+
+            {% for recipe in recipes %}
+
+            <div class="col-lg-4 col-md-6 col-12">
+                <div class="card">
+                    <div class="card-inner">
+                        <div class="image-wrapper">
+                            <img src="{{ recipe.image_url }}">
+                        </div>
+                        <div class="card-contents">
+                            <b>{{ recipe.name }}</b>
+                            <a href="/recipes/{{ recipe.id }}">Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+{% endif%}
+<div class="container text-center">
+    <div class="justify-content-center">
+        <a class="btn btn-primary" href="/recipes/submit">Submit a Recipe?</a>
+    </div>
+</div>
+
+{% endblock %}
