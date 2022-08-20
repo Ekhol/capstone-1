@@ -8,7 +8,9 @@ user1 = User(
 
     username="test",
     email="test@test.com",
-    password="testing"
+    password="testing",
+    is_authorized=True,
+
 )
 
 recipe1 = Recipe(
@@ -18,7 +20,7 @@ recipe1 = Recipe(
     instructions="test, test, test",
     has_alcohol=True,
     glass_type="Old Fashioned",
-    is_public=False
+    is_public=True
 )
 
 db.session.commit()

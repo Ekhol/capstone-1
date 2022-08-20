@@ -1,11 +1,12 @@
+from email.mime import image
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 
-
 ########################## Recipe Model #########################################
+
 
 class Recipe(db.Model):
 
@@ -18,7 +19,8 @@ class Recipe(db.Model):
     instructions = db.Column(db.Text, nullable=False)
     has_alcohol = db.Column(db.Boolean, default=True, nullable=False)
     glass_type = db.Column(db.String, nullable=False)
-    image_url = db.Column(db.Text, nullable=True)
+    image_url = db.Column(db.Text, nullable=True,
+                          default="/static/stock_bar.jpg")
 
     """This is determined by an authorized user and moves it into public view when True"""
     is_public = db.Column(db.Boolean, default=False, nullable=False)
@@ -31,10 +33,12 @@ class Recipe(db.Model):
     def __repr__(self):
         return f"<Name = {self.name}, Ingredients = {self.ingredients}, Instructions = {self.instructions}>"
 
-
 ########################## User Model ############################################
 
+
 class User(db.Model):
+
+    ######## TO DO: separate public and private recipes tied to user ##########
 
     __tablename__ = "users"
 
@@ -49,6 +53,8 @@ class User(db.Model):
     is_authorized = db.Column(db.Boolean, default=False, nullable=False)
 
     pinned = db.relationship('Recipe', secondary='pinned')
+
+    recipes = db.relationship('Recipe')
 
     def __repr__(self):
         return f"<Username = {self.username}, Email = {self.email}, ID = {self.id}>"

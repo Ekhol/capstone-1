@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="image-wrapper">
+        <img src="{{ recipe.image_url }}" class="img-thumbnail img-fluid">
+    </div>
+    <h1>{{ recipe.name }}</h1>
+    <ul>
+        <li>{{ recipe.ingredients }}</li>
+    </ul>
+    <P>{{ recipe.instructions }}</P>
+    <b>{{ recipe.glass_type }}</b>
+    {% if not recipe.is_public %}
+    <h2>Recipe is private.</h2>
+    {% endif %}
+</div>
+
+{% endblock %}

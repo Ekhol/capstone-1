@@ -1,3 +1,4 @@
+from crypt import methods
 from flask import Flask, redirect, render_template, session, g, flash, request
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
@@ -5,7 +6,7 @@ import os
 import json
 
 from models import db, connect_db, User, Recipe
-from forms import RegistrationForm, LoginForm
+from forms import RegistrationForm, LoginForm, RecipeForm, EditUserForm
 
 CURR_USER_KEY = "curr_user"
 
@@ -121,7 +122,35 @@ def user_details(user_id):
 
     return render_template('users/details.html', user=user)
 
+
+@app.route('/user/edit', methods=['GET', 'POST'])
+def edit_user():
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    user = g.user
+    form = EditUserForm(obj=user)
+
+    if form.validate_on_submit():
+        if User.authenticate(user.username, form.password.data):
+            user.username = form.username.data
+            user.email = form.username.data
+            user.image_url = form.image_url.data or "/static/stock_bar.jpg"
+            user.bio = form.bio.data
+
+            db.session.commit()
+            return redirect(f"/user/{user.id}")
+
+        flash("Incorrect password", "danger")
+
+    return render_template('users/edit.html', form=form, user_id=user.id)
+
 ############################ Recipe Routes ############################
+
+################ TO DO: Make only publicly available recipes viewable ###
+################ - Add search function for the cocktailDB recipes #######
 
 
 @app.route('/recipes')
@@ -135,3 +164,49 @@ def list_recipes():
         recipes = Recipe.query.filter(Recipe.name.like(f"%{search}%")).all()
 
     return render_template('recipes/index.html', recipes=recipes)
+
+
+@app.route('/recipes/submit', methods=['GET', 'POST'])
+def new_recipe():
+
+    if not g.user:
+        flash("Must be logged in to submit a recipe", "danger")
+        return redirect("/login")
+
+    form = RecipeForm()
+
+    if form.validate_on_submit():
+        recipe = Recipe(
+            name=form.name.data,
+            ingredients=form.ingredients.data,
+            has_alcohol=form.has_alcohol.data,
+            glass_type=form.glass_type.data,
+            image_url=form.image_url.data or Recipe.image_url.default.arg,
+            instructions=form.instructions.data,
+
+        )
+        g.user.recipes.append(recipe)
+        db.session.commit()
+
+        return redirect(f"/recipes/{recipe.id}")
+
+    return render_template('recipes/submit.html', form=form)
+
+
+@app.route('/recipes/<int:recipe_id>')
+def recipe_details(recipe_id):
+
+    recipe = Recipe.query.get_or_404(recipe_id)
+
+    if not g.user:
+        flash("Must be logged to view this recipe", "danger")
+        return redirect("/")
+
+    elif recipe.is_public or g.user.id == recipe.author_id or g.user.is_authorized:
+
+        return render_template("/recipes/details.html", recipe=recipe)
+
+    else:
+
+        flash("Access unauthorized.", "danger")
+        return redirect("/")

@@ -4,8 +4,8 @@
 
 <div class="row justify-content-md-center">
     <div class="col-md-7 col-lg-5">
-        <h2 class="join-message">Log In</h2>
-        <form method="POST" id="user_form">
+        <h2 class="join-message">Submit Recipe</h2>
+        <form method="POST" id="recipe_form">
             {{ form.hidden_tag() }}
 
             {% for field in form if field.widget.input_type != 'hidden' %}
@@ -15,11 +15,8 @@
             {{ field(placeholder=field.label.text, class="form-control") }}
             {% endfor %}
 
-            <button class="btn btn-primary btn-lg btn-block">Enter</button>
+            <button class="btn btn-primary btn-lg btn-block">Submit</button>
         </form>
-    </div>
-    <div class="col-md-7 col-lg-5">
-        <a href="/register">Register for an account?</a>
     </div>
 </div>
 

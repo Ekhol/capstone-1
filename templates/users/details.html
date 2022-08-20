@@ -1,11 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+<div class="card">
+    <div class="image-wrapper">
+        <img src="{{ user.profile_picture}}" class="img-thumbnail img-fluid">
+    </div>
+</div>
 <h1>{{ user.username }}</h1>
 
 <P>{{ user.bio }}</P>
 
+<ul>
+    {% for recipe in user.recipes %}
+    <li><a href="/recipes/{{ recipe.id}}">{{ recipe.name }}</a></li>
+    {% endfor %}
+</ul>
+
+<a href="/user/edit">Edit user details?</a>
 <a href="/logout">Log out?</a>
 
 {% endblock %}
