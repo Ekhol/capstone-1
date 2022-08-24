@@ -3,6 +3,23 @@
 {% block content %}
 <div id="ul-container">
     <ul id="card-container" class="list-unstyled">
+        <li class="list-unstyled d-flex justify-content-center">
+            <div class="card" style="width: 45rem;">
+                <img class="card-img-top" src="{{ drink.strDrinkThumb }}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{ drink.strDrink }}</h5>
+                    <h6>{{ drink.strGlass }}</h6>
+                    <ul>
+                        {% for ingredient in ingredients if ingredient %}
+                        <li>{{ measurements[ingredients.index(ingredient)] if not none }} -- {{ ingredient }}</li>
+                        {% endfor %}
+                    </ul>
+                    <hr>
+                    <p class="text-center">{{ drink.strInstructions }}</p>
+                    <h6 class="text-center">{{ drink.strAlcoholic }}</h6>
+                </div>
+            </div>
+        </li>
     </ul>
 </div>
 

@@ -4,6 +4,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 import os
 import json
+import requests
 
 from models import db, connect_db, User, Recipe
 from forms import RegistrationForm, LoginForm, RecipeForm, EditUserForm
@@ -23,6 +24,9 @@ db.create_all()
 debug = DebugToolbarExtension(app)
 
 
+DB_URL = 'http://www.thecocktaildb.com/api/json/v1/1'
+
+
 @app.route("/")
 def root():
 
@@ -32,9 +36,11 @@ def root():
 ############################ Homepage and Public View ############################
 
 @app.route('/home')
-def homepage():
-
-    return render_template("homepage.html")
+def getRandomCocktail():
+    res = requests.get(f'{DB_URL}/random.php').json()
+    drinkJSON = res["drinks"]
+    drink = drinkJSON[0]
+    return render_template("homepage.html", drink=drink)
 
 ############################ User Creation/Login/Logout ############################
 
@@ -210,3 +216,27 @@ def recipe_details(recipe_id):
 
         flash("Access unauthorized.", "danger")
         return redirect("/")
+
+
+############################ Recipe Routes ############################
+
+@app.route('/recipes/cdb/<int:recipe_id>')
+def cdb_details(recipe_id):
+
+    res = requests.get(f'{DB_URL}/lookup.php?i={recipe_id}').json()
+    drinkJSON = res["drinks"]
+    drink = drinkJSON[0]
+
+    ingredients_to_extract = {'strIngredient1', 'strIngredient2', 'strIngredient3', 'strIngredient4', 'strIngredient5', 'strIngredient6', 'strIngredient7',
+                              'strIngredient8', 'strIngredient9', 'strIngredient10', 'strIngredient11', 'strIngredient12', 'strIngredient13', 'strIngredient14', 'strIngredient15'}
+
+    measurements_to_extract = {'strMeasure1', 'strMeasure2', 'strMeasure3', 'strMeasure4', 'strMeasure5', 'strMeasure6', 'strMeasure7',
+                               'strMeasure8', 'strMeasure9', 'strMeasure10', 'strMeasure11', 'strMeasure12', 'strMeasure13', 'strMeasure14', 'strMeasure15'}
+
+    ingredients = [value for key,
+                   value in drink.items() if key in ingredients_to_extract]
+
+    measurements = [value for key,
+                    value in drink.items() if key in measurements_to_extract]
+
+    return render_template("/cdb-recipes/details.html", drink=drink, ingredients=ingredients, measurements=measurements)
