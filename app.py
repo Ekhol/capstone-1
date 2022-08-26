@@ -153,6 +153,58 @@ def edit_user():
 
     return render_template('users/edit.html', form=form, user_id=user.id)
 
+
+@app.route('/user/<int:user_id>/make_admin', methods=["GET", "POST"])
+def make_admin(user_id):
+
+    user = User.query.get(user_id)
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    elif g.user.id == user.id:
+        user.is_authorized = True
+        db.session.add(user)
+        db.commit()
+
+        return redirect("/")
+
+
+@app.route("/user/delete")
+def confirm_delete():
+
+    form = LoginForm()
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    if form.validate_on_submit():
+        user = User.authenticate(form.username.data, form.password.data)
+
+        if user:
+            return redirect(f"/user/{user.id}/delete")
+
+    return render_template('users/delete.html', form=form)
+
+
+@app.route("/user/<int:user_id>/delete", methods=["GET", "POST"])
+def delete_user(user_id):
+
+    user = User.query.get(user_id)
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    elif g.user.id == user.id or g.user.is_authorized:
+        db.session.delete(user)
+        db.session.commit()
+
+        return redirect("/")
+
+
 ############################ Recipe Routes ############################
 
 ################ TO DO: Make only publicly available recipes viewable ###
@@ -218,7 +270,7 @@ def recipe_details(recipe_id):
         return redirect("/")
 
 
-@app.route('/recipes/<int:recipe_id>/publish')
+@app.route('/recipes/<int:recipe_id>/publish', methods=["GET", "POST"])
 def publish_recipe(recipe_id):
 
     recipe = Recipe.query.get_or_404(recipe_id)
@@ -227,16 +279,54 @@ def publish_recipe(recipe_id):
         flash("Must be recipe owner or admin to publish.", "danger")
         return redirect("/")
 
-    elif g.user.id == recipe.author_id or g.user.is_authorized:
-        recipe.is_public == True
+    elif g.user.id == recipe.author_id:
+        recipe.is_public = True
+        db.session.add(recipe)
+        db.session.commit()
+
+        return redirect(f"/user/{g.user.id}")
 
     else:
-
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
 
+@app.route('/recipes/<int:recipe_id>/private', methods=["GET", "POST"])
+def make_private_recipe(recipe_id):
+
+    recipe = Recipe.query.get_or_404(recipe_id)
+
+    if not g.user:
+        flash("Must be recipe owner or admin to make private.", "danger")
+        return redirect("/")
+
+    elif g.user.id == recipe.author_id:
+        recipe.is_public = False
+        db.session.add(recipe)
+        db.session.commit()
+
+        return redirect(f"/user/{g.user.id}")
+
+    else:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+
+@app.route('/recipes/<int:recipe_id>/delete', methods=["GET", "POST"])
+def delete_recipe(recipe_id):
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    recipe = Recipe.query.get(recipe_id)
+    db.session.delete(recipe)
+    db.session.commit()
+
+    return redirect(f"/user/{g.user.id}")
+
 ############################ CocktailDB Routes ############################
+
 
 @app.route('/recipes/cdb/<int:recipe_id>')
 def cdb_details(recipe_id):

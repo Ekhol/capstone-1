@@ -1,22 +1,41 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="card">
-    <div class="image-wrapper">
-        <img src="{{ user.profile_picture}}" class="img-thumbnail img-fluid">
+<div class="d-flex justify-content-center">
+    <div class="card" style="width: 75rem;">
+        <div class="image-wrapper">
+            <img src="{{ user.profile_picture}}" class="img-thumbnail img-fluid">
+        </div>
+
+        <h1>{{ user.username }}</h1>
+
+        <P>{{ user.bio }}</P>
+
+        <hr>
+
+        <ul>
+            {% for recipe in user.recipes %}
+            <h4>{{ user.username }}'s Recipes</h4>
+            <li><a href="/recipes/{{ recipe.id}}">{{ recipe.name }}</a>
+                {% if g.user.id == user.id %} -
+                {% if recipe.is_public %}
+                <a href="/recipes/{{ recipe.id }}/private">Make Private</a>
+                {% elif recipe.is_public == False %}
+                <a href="/recipes/{{ recipe.id }}/publish">Publish</a>
+                {% endif %}
+                or <a href="/recipes/{{ recipe.id }}/delete">Delete</a>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+
+        <hr>
+        {% if g.user.id == user.id %}
+        <a href="/user/edit">Edit user details</a>
+        <a href="/logout">Log out</a>
+        <a href="/user/delete">Delete user</a>
+        {% endif %}
     </div>
 </div>
-<h1>{{ user.username }}</h1>
-
-<P>{{ user.bio }}</P>
-
-<ul>
-    {% for recipe in user.recipes %}
-    <li><a href="/recipes/{{ recipe.id}}">{{ recipe.name }}</a></li>
-    {% endfor %}
-</ul>
-
-<a href="/user/edit">Edit user details?</a>
-<a href="/logout">Log out?</a>
 
 {% endblock %}
