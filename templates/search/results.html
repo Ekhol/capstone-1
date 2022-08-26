@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<div id="ul-container">
+    <ul id="card-container" class="list-unstyled">
+        {% for result in results %}
+        <li class="list-unstyled d-flex justify-content-center">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src="{{ result.image_url }}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title text-center">{{ result.name }}</h5>
+                    <div class="container text-center">
+                        <a href="/recipes/cdb/{{ result.id }}" class="btn btn-primary">More
+                            Details</a>
+                    </div>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -1,6 +1,6 @@
 from xmlrpc.client import Boolean
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, BooleanField
+from wtforms import StringField, PasswordField, TextAreaField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Email, Length, URL
 
 
@@ -40,3 +40,8 @@ class EditUserForm(FlaskForm):
     image_url = StringField('Image URL')
     password = PasswordField('Current Password', validators=[
                              Length(min=6), DataRequired()])
+
+
+class SearchForm(FlaskForm):
+
+    search = StringField('', validators=[DataRequired()])

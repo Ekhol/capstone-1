@@ -1,19 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="card">
-    <div class="image-wrapper">
-        <img src="{{ recipe.image_url }}" class="img-thumbnail img-fluid">
+<div class="d-flex justify-content-center">
+    <div class="card" style="width: 45rem;">
+        <img src="{{ recipe.image_url }}" class="card-img-top">
+        <div class="card-body">
+            <h1 class="card-title">{{ recipe.name }}</h1>
+            <ul>
+                <li>{{ recipe.ingredients }}</li>
+            </ul>
+            <hr>
+            <P class="text-center">{{ recipe.instructions }}</P>
+            <b>{{ recipe.glass_type }}</b>
+            {% if not recipe.is_public %}
+            <h3>Recipe is private.</h2>
+                {% endif %}
+        </div>
     </div>
-    <h1>{{ recipe.name }}</h1>
-    <ul>
-        <li>{{ recipe.ingredients }}</li>
-    </ul>
-    <P>{{ recipe.instructions }}</P>
-    <b>{{ recipe.glass_type }}</b>
-    {% if not recipe.is_public %}
-    <h2>Recipe is private.</h2>
-    {% endif %}
 </div>
 
 {% endblock %}

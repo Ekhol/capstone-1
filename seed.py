@@ -6,8 +6,9 @@ db.create_all()
 
 user1 = User(
 
-    username="test",
-    email="test@test.com",
+    id=1,
+    username="Admin",
+    email="frost.nathan1995@gmail.com",
     password="testing",
     is_authorized=True,
 

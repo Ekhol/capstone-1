@@ -7,7 +7,7 @@ import json
 import requests
 
 from models import db, connect_db, User, Recipe
-from forms import RegistrationForm, LoginForm, RecipeForm, EditUserForm
+from forms import RegistrationForm, LoginForm, RecipeForm, EditUserForm, SearchForm
 
 CURR_USER_KEY = "curr_user"
 
@@ -218,7 +218,25 @@ def recipe_details(recipe_id):
         return redirect("/")
 
 
-############################ Recipe Routes ############################
+@app.route('/recipes/<int:recipe_id>/publish')
+def publish_recipe(recipe_id):
+
+    recipe = Recipe.query.get_or_404(recipe_id)
+
+    if not g.user:
+        flash("Must be recipe owner or admin to publish.", "danger")
+        return redirect("/")
+
+    elif g.user.id == recipe.author_id or g.user.is_authorized:
+        recipe.is_public == True
+
+    else:
+
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+
+############################ CocktailDB Routes ############################
 
 @app.route('/recipes/cdb/<int:recipe_id>')
 def cdb_details(recipe_id):
@@ -240,3 +258,34 @@ def cdb_details(recipe_id):
                     value in drink.items() if key in measurements_to_extract]
 
     return render_template("/cdb-recipes/details.html", drink=drink, ingredients=ingredients, measurements=measurements)
+
+
+############################ Search Routes ############################
+
+@app.route('/search', methods=["GET", "POST"])
+def search_home():
+
+    form = SearchForm()
+    if request.method == 'POST':
+        return search_results(form)
+
+    return render_template("search/search.html", form=form)
+
+
+@app.route('/results')
+def search_results(search):
+
+    search_string = search.data['search']
+    results = Recipe.query.filter(
+        Recipe.name.like(f"%{search_string}%")).all()
+
+    if search_string == '':
+        flash("Please Enter a Valid Search Term", "danger")
+        return render_template("/search")
+
+    if not results:
+        flash('No results found')
+        return redirect("/search")
+
+    else:
+        return render_template('search/results.html', results=results)
