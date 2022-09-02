@@ -6,7 +6,7 @@ import os
 import json
 import requests
 
-from models import db, connect_db, User, Recipe
+from models import db, connect_db, User, Recipe, Pinned
 from forms import RegistrationForm, LoginForm, RecipeForm, EditUserForm, SearchForm
 
 CURR_USER_KEY = "curr_user"
@@ -41,6 +41,13 @@ def getRandomCocktail():
     drinkJSON = res["drinks"]
     drink = drinkJSON[0]
     return render_template("homepage.html", drink=drink)
+
+
+@app.route("/new-account")
+def make_acc():
+
+    return render_template('users/no_account.html')
+
 
 ############################ User Creation/Login/Logout ############################
 
@@ -205,10 +212,18 @@ def delete_user(user_id):
         return redirect("/")
 
 
-############################ Recipe Routes ############################
+@app.route("/user/<int:user_id>/pinned")
+def show_pinned(user_id):
 
-################ TO DO: Make only publicly available recipes viewable ###
-################ - Add search function for the cocktailDB recipes #######
+    user = User.query.get(user_id)
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    elif g.user.id == user.id:
+
+        return render_template("users/pinned.html", user=user)
 
 
 @app.route('/recipes')
@@ -256,13 +271,9 @@ def recipe_details(recipe_id):
 
     recipe = Recipe.query.get_or_404(recipe_id)
 
-    if not g.user:
-        flash("Must be logged to view this recipe", "danger")
-        return redirect("/")
+    if recipe.is_public or g.user.id == recipe.author_id or g.user.is_authorized:
 
-    elif recipe.is_public or g.user.id == recipe.author_id or g.user.is_authorized:
-
-        return render_template("/recipes/details.html", recipe=recipe)
+        return render_template("recipes/details.html", recipe=recipe)
 
     else:
 
@@ -325,6 +336,27 @@ def delete_recipe(recipe_id):
 
     return redirect(f"/user/{g.user.id}")
 
+
+@app.route("/recipes/<int:recipe_id>/pin")
+def pin_cocktail(recipe_id):
+
+    drink = Recipe.query.get(recipe_id)
+    user = User.query.get(g.user.id)
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    elif drink.is_public or g.user.id == drink.author_id:
+
+        user.pinned.append(drink)
+
+        db.session.add(user)
+        db.session.commit()
+
+        return redirect(f"/user/{g.user.id}/pinned")
+
+
 ############################ CocktailDB Routes ############################
 
 
@@ -355,6 +387,9 @@ def cdb_details(recipe_id):
 @app.route('/search', methods=["GET", "POST"])
 def search_home():
 
+    if not g.user:
+        return redirect("/new-account")
+
     form = SearchForm()
     if request.method == 'POST':
         return search_results(form)
@@ -367,7 +402,7 @@ def search_results(search):
 
     search_string = search.data['search']
     results = Recipe.query.filter(
-        Recipe.name.like(f"%{search_string}%")).all()
+        Recipe.name.ilike(f"%{search_string}%")).all()
 
     if search_string == '':
         flash("Please Enter a Valid Search Term", "danger")

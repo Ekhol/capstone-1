@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if user.pinned|length == 0 %}
+<h1 class="text-center">No pinned recipes yet!</h1>
+{% else %}
+<div class="row justify-content-center">
+    <div class="col-sm-9">
+        <div class="row">
+
+            {% for pin in user.pinned %}
+
+            <div class="col-lg-4 col-md-6 col-12">
+                <div class="card">
+                    <div class="card-inner">
+                        <div class="image-wrapper">
+                            <img src="{{ pin.image_url }}" class="img-thumbnail img-fluid">
+                        </div>
+                        <div class="card-contents">
+                            <b>{{ pin.name }}</b>
+                            <a href="/recipes/{{ pin.id }}">Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+{% endif%}
+
+{% endblock %}

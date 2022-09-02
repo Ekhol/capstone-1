@@ -49,6 +49,7 @@ class User(db.Model):
     profile_picture = db.Column(db.Text, default="/static/stock_bar.jpg")
     bio = db.Column(db.Text, nullable=True)
     password = db.Column(db.Text, nullable=False)
+    pinned = db.Column(db.Integer, nullable=True)
 
     is_authorized = db.Column(db.Boolean, default=False, nullable=False)
 
