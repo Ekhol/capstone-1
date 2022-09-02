@@ -382,7 +382,14 @@ def cdb_details(recipe_id):
     return render_template("/cdb-recipes/details.html", drink=drink, ingredients=ingredients, measurements=measurements)
 
 
+@app.route('/recipes/cdb')
+def cdb_home():
+    form = SearchForm()
+
+    return render_template("/cdb-recipes/home.html", form=form)
+
 ############################ Search Routes ############################
+
 
 @app.route('/search', methods=["GET", "POST"])
 def search_home():

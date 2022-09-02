@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row justify-content-md-center">
+    <div class="col-md-7 col-lg-5">
+        <h1>Search CDB Recipes</h1>
+        <hr>
+        <h2>This page still under construction!</h2>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+
+            {% for field in form if field.widget.input_type != 'hidden' %}
+            {% for error in field.errors %}
+            <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+            {{ field(placeholder=field.label.text, class="form-control") }}
+            {% endfor %}
+
+            <button class="btn btn-primary btn-lg btn-block">Search!</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
