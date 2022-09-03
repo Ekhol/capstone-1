@@ -46,7 +46,7 @@ def getRandomCocktail():
 @app.route("/new-account")
 def make_acc():
 
-    return render_template('users/no_account.html')
+    return render_template('uses/no_account.html')
 
 
 ############################ User Creation/Login/Logout ############################
@@ -178,7 +178,7 @@ def make_admin(user_id):
         return redirect("/")
 
 
-@app.route("/user/delete")
+@app.route("/user/delete", methods=["GET", "POST"])
 def confirm_delete():
 
     form = LoginForm()
