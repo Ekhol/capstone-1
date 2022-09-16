@@ -16,7 +16,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///pocket-cocktails'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
-app.config['SECRET_KEY'] = "12345"
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
 connect_db(app)
 db.create_all()
