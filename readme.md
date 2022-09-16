@@ -1,9 +1,10 @@
 # Back-Pocket Cocktails
 ## A Resource for Bartenders and Cocktail Enthusiasts
 
-# Note: This app is designed for mobile devices.
-## https://back-pocket-cocktails.herokuapp.com/search
+### Note: This app is designed for mobile devices.
+### https://back-pocket-cocktails.herokuapp.com/search
 
+Back-Pocket Cocktails is a resource for bartenders on the job in order to have an efficient means of storing personal cocktail recipes, finding public recipes, and accessing them on the fly. It is designed to be used on the job when you need to find a recipe but can't spend time weeding through searches or unorganized shared folders.
 
 ## Preliminary API Selection:
 
@@ -11,15 +12,7 @@ API selected: https://www.thecocktaildb.com/api.php
 
 Database Selection:
 
-- Static/Public selection will be through the cocktaildb API, while there will also be a private database for users with accounts.
-
-- The static database will be provided by the cocktaildb, while the private selection will allow users to upload recipes and information that are accessible to levels that they select: public, authorized, and authored.
-
-- Public recipes will be accessible in the same way as the cocktaildb recipes.
-
-- Private recipes will remain private until publicized. ie. giving access to bartenders at a specific restaurant where they need the current and past recipes. This collection is not available to public users.
-
-- Authored recipes are only affiliated with the creator. This is the trial stage of the drink, giving the author a chance to log trials before committing them to public consumption. They are directly tied to the author/user and need to be committed to an authorized recipe collection before they can be seen by others.
+- CocktailDB (CDB) API will be the backbone of the public access, while the postgres database will store user information and the private cocktails. 
 
 ## User Flow:
 
@@ -27,21 +20,36 @@ Database Selection:
 
 Public view will be the data accessible by users who are not logged in or do not have an account. It will provide the information pulled from the cocktaildb as well as data from drinks that authorized users have deemed public. 
 
-PULLS data from cocktaildb API and the original database and displays them in two different fields:
+- Homepage: displays one CDB drink using their random API method. The NavBar displays limited options when not logged in: Home, User Recipes, CDB Recipes, and Login. Users are able to view all CDB recipes through a name search function within the CDB Recipes tab, as well as all public user recipes through the User Recipes tab and search.
+  
+  - User Recipes: displays all public user recipes in order of creation. There is a link to a search function that searches approximate names of user recipes using the '.ilike' SQLAlchemy operator.
+  - CDB Recipes: returns a search form that uses approximate searching provided by the API search by name function.
+  - Login: takes user to the login form with an option to register for an account.
 
-- Database cocktails
-- User-submitted cocktails
-
-Begins with the homepage displaying a random cocktail pulled from the CocktailDB API. 
+- When viewing recipe details, the cards display a photograph (or default image), the name of the recipe, ingredients, glass type, instructions, and whether or not it is alcoholic.
 
 ### Authorized User View
 
-Authorized user view will be accessible by users who have created an account and are logged in. Beyond accessing the classic cocktail and public user-submitted list, they will have access to individualized folders where they can pin cocktails for easy access and a field to upload their own drinks. 
+Authorized user view will be accessible by users who have created an account and are logged in. The NavBar is updated to remove the Login button and add an Account route, Pinned route, and Log out.
 
+- Homepage: functions the same as the public view aside from the updated NavBar.
+  - Account: displays account details of the user currently logged in with optional profile picture, bio, list of user-submitted recipes with options to make public/private or delete, and links to edit user details/log out/delete user.
+  - Pinned: displays recipes pinned by the user.
+  - Log out: logs the user out and returns them to the homepage.
+- Recipe detail pages display the option to pin another user recipe when a user is logged in.
+- When logged in, users are able to submit recipes that default to private, which can then be made public from the Account page. 
+- Pinned cocktails can be private if they were submitted by the user who pinned them.
 
-Stretch Goals
+## Code:
 
-- Stronger authentication
-- Public sourcing of images - cocktaildb has a collection of pictures for each drink and, although I admire their work, I think it could be personalized.
-- Community forum - a place to brainstorm and test cocktail recipes in a supportive space.
-- Design - I don't want it to look too terrible.
+All of the work so far has been entirely in Python and HTML using Flask, WTForms, SQLAlchemy, and Jinja2. A postgres server is the basis for the user back-end while the CDB API is much of the basis for users that are not logged in. Bootstrap is used for the CSS in-line of the HTML so there are no separate CSS files. 
+
+## Further Goals:
+
+- Stronger authentication for the users.
+- Folders for pinned cocktails that can be shared among users (current/past menus, etc.).
+- Adjusting design for various screen sizes.
+
+## Recent Changes:
+
+- 9/16/2022 - Fixed a handful of typos, updated the requirements.txt, and deployed it using heroku.
