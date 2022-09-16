@@ -47,7 +47,7 @@ def getRandomCocktail():
 @app.route("/new-account")
 def make_acc():
 
-    return render_template('uses/no_account.html')
+    return render_template('users/no_account.html')
 
 
 ############################ User Creation/Login/Logout ############################
@@ -383,11 +383,25 @@ def cdb_details(recipe_id):
     return render_template("/cdb-recipes/details.html", drink=drink, ingredients=ingredients, measurements=measurements)
 
 
-@app.route('/recipes/cdb')
+@app.route('/recipes/cdb', methods=["GET", "POST"])
 def cdb_home():
     form = SearchForm()
+    if request.method == 'POST':
+        return cdb_results(form)
 
     return render_template("/cdb-recipes/home.html", form=form)
+
+
+@app.route('/recipes/cdb_results')
+def cdb_results(search):
+
+    search_string = search.data['search']
+    res = requests.get(f'{DB_URL}/search.php?s={search_string}').json()
+    drinkJSON = res["drinks"]
+    drink = drinkJSON[0]
+
+    return render_template("/cdb-recipes/results.html", drink=drink)
+
 
 ############################ Search Routes ############################
 
@@ -395,14 +409,11 @@ def cdb_home():
 @app.route('/search', methods=["GET", "POST"])
 def search_home():
 
-    if not g.user:
-        return redirect("/new-account")
-
     form = SearchForm()
     if request.method == 'POST':
         return search_results(form)
 
-    return render_template("search/search.html", form=form)
+    return render_template("recipes/index.html", form=form)
 
 
 @app.route('/results')
