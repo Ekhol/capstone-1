@@ -6,6 +6,10 @@
 
 Back-Pocket Cocktails is a resource for bartenders on the job in order to have an efficient means of storing personal cocktail recipes, finding public recipes, and accessing them on the fly. It is designed to be used on the job when you need to find a recipe but can't spend time weeding through searches or unorganized shared folders.
 
+## Code:
+
+All of the work so far has been entirely in Python and HTML using Flask, WTForms, SQLAlchemy, and Jinja2. A postgres server is the basis for the user back-end while the CDB API is much of the basis for users that are not logged in. Bootstrap is used for the CSS in-line of the HTML so there are no separate CSS files. 
+
 ## Preliminary API Selection:
 
 API selected: https://www.thecocktaildb.com/api.php
@@ -40,15 +44,13 @@ Authorized user view will be accessible by users who have created an account and
 - When logged in, users are able to submit recipes that default to private, which can then be made public from the Account page. 
 - Pinned cocktails can be private if they were submitted by the user who pinned them.
 
-## Code:
-
-All of the work so far has been entirely in Python and HTML using Flask, WTForms, SQLAlchemy, and Jinja2. A postgres server is the basis for the user back-end while the CDB API is much of the basis for users that are not logged in. Bootstrap is used for the CSS in-line of the HTML so there are no separate CSS files. 
-
 ## Further Goals:
 
 - Stronger authentication for the users.
 - Folders for pinned cocktails that can be shared among users (current/past menus, etc.).
 - Adjusting design for various screen sizes.
+- Dividing app.py and models.py across multiple files for organization.
+- Ongoing: make it look pretty!
 
 ## Recent Changes:
 
