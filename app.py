@@ -206,6 +206,8 @@ def delete_user(user_id):
         return redirect("/")
 
     elif g.user.id == user.id or g.user.is_authorized:
+        for recipe in user.recipes:
+            delete_recipe(recipe.id)
         db.session.delete(user)
         db.session.commit()
 
@@ -224,6 +226,8 @@ def show_pinned(user_id):
     elif g.user.id == user.id:
 
         return render_template("users/pinned.html", user=user)
+
+############################ Recipe Routes ############################
 
 
 @app.route('/recipes')
