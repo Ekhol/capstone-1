@@ -1,7 +1,7 @@
 from flask import redirect, render_template, g, flash, Blueprint
 from models import db, User
 from forms import LoginForm, EditUserForm
-from app import delete_recipe
+from recipe_route import delete_recipe
 
 user_route = Blueprint('user_route', __name__, template_folder='templates')
 

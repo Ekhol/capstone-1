@@ -1,10 +1,10 @@
 from flask import redirect, render_template, flash, Blueprint, request
 from models import Recipe
 from forms import SearchForm
-from app import DB_URL
 import requests
 
 search_route = Blueprint('search_route', __name__, template_folder='templates')
+DB_URL = 'http://www.thecocktaildb.com/api/json/v1/1'
 
 
 @search_route.route('/search', methods=["GET", "POST"])
