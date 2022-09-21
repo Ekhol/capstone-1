@@ -1,12 +1,14 @@
 from crypt import methods
-from flask import Flask, redirect, render_template, session, g, flash, request
+from flask import Flask, redirect, render_template, session, g, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 import os
 import json
 import requests
 
-from models import db, connect_db, User
+from user_model import db, connect_db, User
+from recipe_model import db, connect_db, Recipe
+from pinned_model import db, connect_db, Pinned
 from forms import RegistrationForm, LoginForm
 from user_route import user_route
 from recipe_route import recipe_route

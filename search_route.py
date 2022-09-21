@@ -1,5 +1,5 @@
 from flask import redirect, render_template, flash, Blueprint, request
-from models import Recipe
+from recipe_model import Recipe
 from forms import SearchForm
 import requests
 
