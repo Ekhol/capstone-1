@@ -1,5 +1,5 @@
 from flask import redirect, render_template, g, flash, Blueprint, request
-from models import db, Recipe, User, Pinned
+from models import db, Recipe, User
 from forms import RecipeForm
 
 recipe_route = Blueprint('recipe_route', __name__, template_folder='templates')
@@ -49,13 +49,10 @@ def new_recipe():
 def recipe_details(recipe_id):
 
     recipe = Recipe.query.get_or_404(recipe_id)
-    pin = Pinned.query.all()
-    if pin.recipe_id == recipe_id & pin.user_id == g.user.id:
-        pinned = True
 
     if recipe.is_public or g.user.id == recipe.author_id or g.user.is_authorized:
 
-        return render_template("recipes/details.html", recipe=recipe, pinned=pinned)
+        return render_template("recipes/details.html", recipe=recipe)
 
     else:
 
