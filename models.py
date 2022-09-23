@@ -100,7 +100,7 @@ class Pinned(db.Model):
         'users.id', ondelete='CASCADE'))
 
     recipe_id = db.Column(db.Integer, db.ForeignKey(
-        'recipes.id', ondelete='CASCADE'), unique=True)
+        'recipes.id', ondelete='CASCADE'))
 
 
 ########################## Initialize DB #########################################

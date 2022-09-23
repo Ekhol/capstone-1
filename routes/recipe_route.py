@@ -1,6 +1,5 @@
 from flask import redirect, render_template, g, flash, Blueprint, request
-from recipe_model import db, Recipe
-from user_model import User
+from models import db, Recipe, User, Pinned
 from forms import RecipeForm
 
 recipe_route = Blueprint('recipe_route', __name__, template_folder='templates')
