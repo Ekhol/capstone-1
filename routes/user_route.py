@@ -1,5 +1,5 @@
 from flask import redirect, render_template, g, flash, Blueprint
-from user_model import db, User
+from models import db, User
 from forms import LoginForm, EditUserForm
 from recipe_route import delete_recipe
 

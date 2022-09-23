@@ -6,13 +6,11 @@ import os
 import json
 import requests
 
-from user_model import db, connect_db, User
-from recipe_model import db, connect_db, Recipe
-from pinned_model import db, connect_db, Pinned
+from models import db, connect_db, User
 from forms import RegistrationForm, LoginForm
-from user_route import user_route
-from recipe_route import recipe_route
-from search_route import search_route
+from routes.user_route import user_route
+from routes.recipe_route import recipe_route
+from routes.search_route import search_route
 
 CURR_USER_KEY = "curr_user"
 

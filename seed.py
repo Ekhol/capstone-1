@@ -1,7 +1,5 @@
 from app import db
-from user_model import User
-from recipe_model import Recipe
-from pinned_model import Pinned
+from models import Pinned, Recipe, User
 
 db.drop_all()
 db.create_all()
