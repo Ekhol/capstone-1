@@ -54,4 +54,5 @@ Authorized user view will be accessible by users who have created an account and
 
 ## Recent Changes:
 
+- 9/23/2022 - Added some unit testing for the models, divided some of the python into different route files.
 - 9/16/2022 - Fixed a handful of typos, updated the requirements.txt, and deployed it using heroku.
