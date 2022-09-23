@@ -16,7 +16,7 @@
             <h3>Recipe is private.</h3>
             {% endif %}
 
-            {% if not pinned %}
+            {% if not pin %}
             <hr>
             <a href="/recipes/{{ recipe.id }}/pin">Pin this drink?</a>
             {% endif %}

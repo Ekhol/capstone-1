@@ -49,11 +49,12 @@ def new_recipe():
 def recipe_details(recipe_id):
 
     recipe = Recipe.query.get_or_404(recipe_id)
-    pinned = Pinned.query.filter(Pinned.recipe_id == recipe_id)
+    pinned = Pinned.query.all()
 
     if recipe.is_public or g.user.id == recipe.author_id or g.user.is_authorized:
-
-        return render_template("recipes/details.html", recipe=recipe, pinned=pinned)
+        if pinned.recipe_id == recipe_id:
+            pin = True
+            return render_template("recipes/details.html", recipe=recipe, pin=pin)
 
     else:
 
