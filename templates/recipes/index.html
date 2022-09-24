@@ -7,13 +7,12 @@
     <div class="col-sm-9">
         <div class="row">
             <br>
-            {% for recipe in recipes if recipe.is_public %}
-
             <div class="container text-center">
                 <div class="justify-content-center">
                     <a class="btn btn-primary" href="/search">Search User Recipes?</a>
                 </div>
             </div>
+            {% for recipe in recipes if recipe.is_public %}
 
             <div class="col-lg-4 col-md-6 col-12">
                 <div class="card">
