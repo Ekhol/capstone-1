@@ -65,6 +65,10 @@ def confirm_delete():
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
+    if g.user.username == "testing":
+        flash("Cannot delete the test account.", "danger")
+        return redirect("/")
+
     if form.validate_on_submit():
         user = User.authenticate(form.username.data, form.password.data)
 
@@ -81,6 +85,10 @@ def delete_user(user_id):
 
     if not g.user:
         flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    elif g.user.username == "testing":
+        flash("Cannot delete the test account.", "danger")
         return redirect("/")
 
     elif g.user.id == user.id or g.user.is_authorized:

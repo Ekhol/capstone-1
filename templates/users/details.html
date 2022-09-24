@@ -33,7 +33,9 @@
         {% if g.user.id == user.id %}
         <a href="/user/edit">Edit user details</a>
         <a href="/logout">Log out</a>
+        {% if g.user.username != "testing" %}
         <a href="/user/delete">Delete user</a>
+        {% endif %}
         {% endif %}
     </div>
 </div>
