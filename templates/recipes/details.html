@@ -18,8 +18,9 @@
 
 
             <hr>
+            {% if g.user %}
             <a href="/recipes/{{ recipe.id }}/pin">Pin this drink?</a>
-
+            {% endif %}
 
         </div>
     </div>
