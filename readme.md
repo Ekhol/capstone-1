@@ -2,7 +2,6 @@
 ## A Resource for Bartenders and Cocktail Enthusiasts
 
 ### Note: This app is designed for mobile devices.
-### https://back-pocket-cocktails.herokuapp.com/
 
 Back-Pocket Cocktails is a resource for bartenders on the job in order to have an efficient means of storing personal cocktail recipes, finding public recipes, and accessing them on the fly. It is designed to be used on the job when you need to find a recipe but can't spend time weeding through searches or unorganized shared folders.
 
